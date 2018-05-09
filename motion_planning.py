@@ -5,7 +5,7 @@ import csv
 import numpy as np
 
 from enum import Enum, auto
-from planning_utils import a_star, heuristic, create_grid
+from planning_utils import a_star, heuristic, create_grid, prune_path
 from udacidrone import Drone
 from udacidrone.connection import MavlinkConnection
 from udacidrone.messaging import MsgID
@@ -117,50 +117,45 @@ class MotionPlanning(Drone):
     self.target_position[2] = TARGET_ALTITUDE
 
     # TODO: read lat0, lon0 from colliders into floating point values
-    with open('colliders.csv', newline='') as f: 
-      reader = csv.reader(f) 
-      row1 = next(reader)
-
-    lon0 = row1[1].strip('lon0')
-    lat0 = row1[0].strip('lat0')
+	  with open('colliders.csv') as f:
+      reader = f.readline().split(',')
+  	lat0 = float(reader[0].strip().split(' ')[1])
+  	lon0 = float(reader[1].strip().split(' ')[1])
 
     # TODO: set home position to (lon0, lat0, 0)
-    self.set_home_position(lon0, lat0, TARGET_ALTITUDE)
-    print(lon0)
-    print(lat0)
-    
+    self.set_home_position(lon0, lat0, 0)
+
     # TODO: retrieve current global position
-    global_position = (lon0, lat0, 0)
-    global_home = (lon0, lat0, 0)
-    #self._longitude
-    #self._latitude
-    #self._atitude
-    
+  	global_position = [self._longitude, self._latitude, self._altitude]
+
     # TODO: convert to current local position using global_to_local()
-    local_position = global_to_local(global_position, global_home)
-  
+    local_position = global_to_local(global_position, self.global_home)
+
     print('global home {0}, position {1}, local position {2}'.format(self.global_home, self.global_position, self.local_position))
-    
+
     # Read in obstacle map
     data = np.loadtxt('colliders.csv', delimiter=',', dtype='Float64', skiprows=2)
-    
+
     # Define a grid for a particular altitude and safety margin around obstacles
     grid, north_offset, east_offset = create_grid(data, TARGET_ALTITUDE, SAFETY_DISTANCE)
     print("North offset = {0}, east offset = {1}".format(north_offset, east_offset))
-    
+
     # Define starting point on the grid (this is just grid center)
-    #grid_start = (-north_offset, -east_offset)
+    # grid_start = (-north_offset, -east_offset)
     # TODO: convert start position to current position rather than map center
-    #north_size = int(np.ceil((local_position[0] - north_offset)))
-    #east_size = int(np.ceil((local_position[1] - east_offset)))
-    grid_start = (int(np.ceil((local_position[0] - north_offset))), int(np.ceil((local_position[1] - east_offset))))
+    # north_size = int(np.ceil((local_position[0] - north_offset)))
+    # east_size = int(np.ceil((local_position[1] - east_offset)))
+    grid_start = (int(local_position[0] - north_offset), int(local_position[1] - east_offset))
 
     # Set goal as some arbitrary position on the grid
     # grid_goal = (-north_offset + 10, -east_offset + 10)
 
     # TODO: adapt to set goal as latitude / longitude position and convert
-    grid_goal = global_to_local((-122.393445, 37.795909, 0), global_home)
-
+    goal_position = (-122.393445, 37.795909, 0)
+    local_goal = global_to_local(goal_position, self.global_home)
+    grid_goal = (int(local_goal[0] - north_offset), int(local_goal[1] - east_offset))
+  	
+  	#grid_goal = global_to_local((-122.393445, 37.795909, 0), global_home)
     # washington_street = (-122.396384, 37.797412)
     # local_to_global(local_position, global_home):
 
@@ -169,16 +164,18 @@ class MotionPlanning(Drone):
     # or move to a different search space such as a graph (not done here)
     print('Local Start and Goal: ', grid_start, grid_goal)
     path, _ = a_star(grid, heuristic, grid_start, grid_goal)
-    
+
     # TODO: prune path to minimize number of waypoints
-    path = prune_path(path)    
-    
+    prunepath = prune_path(path)
+
     # Convert path to waypoints
-    waypoints = [[p[0] + north_offset, p[1] + east_offset, TARGET_ALTITUDE, 0] for p in path]
-    
+    waypoints = [[(p[0] + north_offset), (p[1] + east_offset), TARGET_ALTITUDE, 0] for p in prunepath]
+
     # Set self.waypoints
     self.waypoints = waypoints
-    
+
+    print(self.waypoints)
+
     # TODO: send waypoints to sim - Complete - Test Project
     self.send_waypoints()
 
