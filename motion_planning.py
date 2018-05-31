@@ -118,7 +118,11 @@ class MotionPlanning(Drone):
 
     # TODO: read lat0, lon0 from colliders into floating point values
     with open('colliders.csv') as f:
+<<<<<<< HEAD
     	reader = f.readline().split(',')
+=======
+      reader = f.readline().split(',')
+>>>>>>> 77997b0f0f5ef84b7cba1868e5dabae91cce1583
     lat0 = float(reader[0].strip().split(' ')[1])
     lon0 = float(reader[1].strip().split(' ')[1])
 
@@ -155,7 +159,7 @@ class MotionPlanning(Drone):
     local_goal = global_to_local(goal_position, self.global_home)
     grid_goal = (int(local_goal[0] - north_offset), int(local_goal[1] - east_offset))
   	
-  	#grid_goal = global_to_local((-122.393445, 37.795909, 0), global_home)
+    #grid_goal = global_to_local((-122.393445, 37.795909, 0), global_home)
     # washington_street = (-122.396384, 37.797412)
     # local_to_global(local_position, global_home):
 
