@@ -3,7 +3,6 @@
 
 ---
 
-
 # Required Steps for a Passing Submission:
 1. Load the 2.5D map in the colliders.csv file describing the environment.
 2. Discretize the environment into a grid or graph representation.
@@ -18,6 +17,7 @@
 ### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
 
 ---
+
 ### Writeup / README
 
 #### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  
@@ -44,13 +44,11 @@ Here's | A | Snappy | Table
 #### 1. Set your global home position
 Here students should read the first line of the csv file, extract lat0 and lon0 as floating point values and use the self.set_home_position() method to set global home. Explain briefly how you accomplished this in your code.
 
-
 And here is a lovely picture of our downtown San Francisco environment from above!
 ![Map of SF](./misc/map.png)
 
 #### 2. Set your current local position
 Here as long as you successfully determine your local position relative to global home you'll be all set. Explain briefly how you accomplished this in your code.
-
 
 Meanwhile, here's a picture of me flying through the trees!
 ![Forest Flying](./misc/in_the_trees.png)
@@ -67,6 +65,27 @@ Minimal requirement here is to modify the code in planning_utils() to update the
 #### 6. Cull waypoints 
 For this step you can use a collinearity test or ray tracing method like Bresenham. The idea is simply to prune your path of unnecessary waypoints. Explain the code you used to accomplish this step.
 
+The drone points were checked to see if they are collinerarity, if they are then the points would be then be pruned out and given a route that would be more efficient. The code below shows how prune and collinerity is written. 
+
+`def collinearity_check(p1, p2, p3, epsilon=1e-6):`
+`   m = np.concatenate((p1, p2, p3), 0)`
+`   det = np.linalg.det(m)`
+`   return abs(det) < epsilon`
+` `
+`def prune_path(path):`
+`   pruned_path = [p for p in path]`
+`   i = 0`
+`   while i < len(pruned_path) - 2:`
+`       p1 = point(pruned_path[i])`
+`       p2 = point(pruned_path[i+1])`
+`       p3 = point(pruned_path[i+2])`
+` `
+`      if collinearity_check(p1, p2, p3):`
+`           pruned_path.remove(pruned_path[i+1])`
+`      else:`
+`           i += 1`
+`   return pruned_path`
+
 ### Execute the flight
 #### 1. Does it work?
 It works!
@@ -76,5 +95,3 @@ It works!
 # Extra Challenges: Real World Planning
 
 For an extra challenge, consider implementing some of the techniques described in the "Real World Planning" lesson. You could try implementing a vehicle model to take dynamic constraints into account, or implement a replanning method to invoke if you get off course or encounter unexpected obstacles.
-
-
