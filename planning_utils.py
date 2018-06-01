@@ -47,13 +47,20 @@ class Action(Enum):
   to the current grid position. The third and final value
   is the cost of performing the action.
   """
+  
+  """
+  NORTH_WEST = (-1, -1, np.sqrt(2))
+  NORTH_EAST = (-1, 1, np.sqrt(2))
+  SOUTH_WEST = (1, -1, np.sqrt(2))
+  SOUTH_EAST = (1, 1, np.sqrt(2))
+  """
 
-	NORTH_WEST = (-1, -1, np.sqrt(2))
-	NORTH_EAST = (-1, 1, np.sqrt(2))
-	SOUTH_WEST = (1, -1, np.sqrt(2))
-	SOUTH_EAST = (1, 1, np.sqrt(2))
+  WEST = (0, -1, 1)
+  EAST = (0, 1, 1)
+  NORTH = (-1, 0, 1)
+  SOUTH = (1, 0, 1)
 
-	@property
+  @property
   def cost(self):
     return self.value[2]
 
@@ -72,14 +79,25 @@ def valid_actions(grid, current_node):
   # check if the node is off the grid or
   # it's an obstacle
 
-	if (x - 1 < 0 or y - 1 < 0) or grid[x - 1, y - 1] == 1:
-		valid_actions.remove(Action.NORTH_WEST)
-	if (x - 1 < 0 or y + 1 > m) or grid[x - 1, y + 1] == 1:
-		valid_actions.remove(Action.NORTH_EAST)
-	if (x + 1 > n or y - 1 < 0) or grid[x + 1, y - 1] == 1:
-		valid_actions.remove(Action.SOUTH_WEST)
-	if (x + 1 > n or y + 1 > m) or grid[x + 1, y + 1] == 1:
-		valid_actions.remove(Action.SOUTH_EAST)
+  """
+  if (x - 1 < 0 or y - 1 < 0) or grid[x - 1, y - 1] == 1:
+    valid_actions.remove(Action.NORTH_WEST)
+  if (x - 1 < 0 or y + 1 > m) or grid[x - 1, y + 1] == 1:
+    valid_actions.remove(Action.NORTH_EAST)
+  if (x + 1 > n or y - 1 < 0) or grid[x + 1, y - 1] == 1:
+    valid_actions.remove(Action.SOUTH_WEST)
+  if (x + 1 > n or y + 1 > m) or grid[x + 1, y + 1] == 1:
+    valid_actions.remove(Action.SOUTH_EAST)
+  """
+  
+  if x - 1 < 0 or grid[x - 1, y] == 1:
+    valid_actions.remove(Action.NORTH)
+  if x + 1 > n or grid[x + 1, y] == 1:
+    valid_actions.remove(Action.SOUTH)
+  if y - 1 < 0 or grid[x, y - 1] == 1:
+    valid_actions.remove(Action.WEST)
+  if y + 1 > m or grid[x, y + 1] == 1:
+    valid_actions.remove(Action.EAST)
 
   return valid_actions
 

@@ -112,17 +112,13 @@ class MotionPlanning(Drone):
   def plan_path(self):
     self.flight_state = States.PLANNING
     print("Searching for a path ...")
-    TARGET_ALTITUDE = 5
+    TARGET_ALTITUDE = 10
     SAFETY_DISTANCE = 5
     self.target_position[2] = TARGET_ALTITUDE
 
     # TODO: read lat0, lon0 from colliders into floating point values
     with open('colliders.csv') as f:
-<<<<<<< HEAD
-    	reader = f.readline().split(',')
-=======
-      reader = f.readline().split(',')
->>>>>>> 77997b0f0f5ef84b7cba1868e5dabae91cce1583
+        reader = f.readline().split(',')
     lat0 = float(reader[0].strip().split(' ')[1])
     lon0 = float(reader[1].strip().split(' ')[1])
 

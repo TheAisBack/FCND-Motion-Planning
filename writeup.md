@@ -27,25 +27,21 @@ You're reading it! Below I describe how I addressed each rubric point and where 
 ### Explain the Starter Code
 
 #### 1. Explain the functionality of what's provided in `motion_planning.py` and `planning_utils.py`
-These scripts contain a basic planning implementation that includes...
+These scripts contain a basic planning implementation that includes the planning_utils.py file which has the main python functions create_grid(), valid_actions() and a_star()
 
-And here's a lovely image of my results (ok this image has nothing to do with it, but it's a nice example of how to include images in your writeup!)
-![Top Down View](./misc/high_up.png)
+However, the main code is the motion_planning.py file
 
-Here's | A | Snappy | Table
---- | --- | --- | ---
-1 | `highlight` | **bold** | 7.41
-2 | a | b | c
-3 | *italic* | text | 403
-4 | 2 | 3 | abcd
+The code includes the function plan_path, which reads the colliders.csv file, sets the global_position, creates the grid, calculating the path, using the functions from planning_utils to push the drone forward and perform those actions.
+
+And here's a lovely image of my results
+![Top Down View](./img/wash_street.png)
 
 ### Implementing Your Path Planning Algorithm
 
 #### 1. Set your global home position
 Here students should read the first line of the csv file, extract lat0 and lon0 as floating point values and use the self.set_home_position() method to set global home. Explain briefly how you accomplished this in your code.
 
-And here is a lovely picture of our downtown San Francisco environment from above!
-![Map of SF](./misc/map.png)
+![Map of SF](./img/wash_street.png)
 
 #### 2. Set your current local position
 Here as long as you successfully determine your local position relative to global home you'll be all set. Explain briefly how you accomplished this in your code.
@@ -65,7 +61,7 @@ Minimal requirement here is to modify the code in planning_utils() to update the
 #### 6. Cull waypoints 
 For this step you can use a collinearity test or ray tracing method like Bresenham. The idea is simply to prune your path of unnecessary waypoints. Explain the code you used to accomplish this step.
 
-The drone points were checked to see if they are collinerarity, if they are then the points would be then be pruned out and given a route that would be more efficient. The code below shows how prune and collinerity is written. 
+The drone points were checked to see if there is collinerarity, if they are then the points would be then be pruned out and given a route that would be more efficient (for example: if a path has three points and all three points are going the same path, then the middle point would be taken out). The code below shows how prune and collinerity is written. 
 
 ```
 def collinearity_check(p1, p2, p3, epsilon=1e-6):   
