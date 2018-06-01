@@ -44,7 +44,6 @@ Here students should read the first line of the csv file, extract lat0 and lon0 
 
 The code below will show how I was able to extract the lat0 and lon0 and then set the position.
 It will show opening the file colliders.csv, then reading the file to extract the lat0 and lon0, then setting that position by using the function set_home_position()
-
 ```
 with open('colliders.csv') as f:
     reader = f.readline().split(',')
@@ -58,7 +57,6 @@ self.set_home_position(lon0, lat0, 0)
 Here as long as you successfully determine your local position relative to global home you'll be all set. Explain briefly how you accomplished this in your code.
 
 The code below shows how I was able to get local position from my global home...
-
 ```
 # TODO: convert to current local position using global_to_local()
 local_position = global_to_local(global_position, self.global_home)
@@ -72,15 +70,40 @@ This code below shows how I was able to get my grid start position from the code
 grid_start = (int(local_position[0] - north_offset), int(local_position[1] - east_offset))
 ```
 
-Look at that drone go!
+Here is a picture of the drone going through the motions.
 
 ![Dot to Dot](./img/dot_dot.png)
 
 #### 4. Set grid goal position from geodetic coords
 This step is to add flexibility to the desired goal location. Should be able to choose any (lat, lon) within the map and have it rendered to a goal location on the grid.
 
+The code below shows this performance
+```
+local_goal = global_to_local(goal_position, self.global_home)
+grid_goal = (int(local_goal[0] - north_offset), int(local_goal[1] - east_offset))
+```
+
 #### 5. Modify A* to include diagonal motion (or replace A* altogether)
 Minimal requirement here is to modify the code in planning_utils() to update the A* implementation to include diagonal motions on the grid that have a cost of sqrt(2), but more creative solutions are welcome. Explain the code you used to accomplish this step.
+
+This code here creates the diagonal moves taken place in the Action()
+```
+WEST = (0, -1, 1)
+EAST = (0, 1, 1)
+NORTH = (-1, 0, 1)
+SOUTH = (1, 0, 1)
+
+if x - 1 < 0 or grid[x - 1, y] == 1:
+    valid_actions.remove(Action.NORTH)
+if x + 1 > n or grid[x + 1, y] == 1:
+    valid_actions.remove(Action.SOUTH)
+if y - 1 < 0 or grid[x, y - 1] == 1:
+    valid_actions.remove(Action.WEST)
+if y + 1 > m or grid[x, y + 1] == 1:
+    valid_actions.remove(Action.EAST)
+
+return valid_actions
+```
 
 #### 6. Cull waypoints 
 For this step you can use a collinearity test or ray tracing method like Bresenham. The idea is simply to prune your path of unnecessary waypoints. Explain the code you used to accomplish this step.

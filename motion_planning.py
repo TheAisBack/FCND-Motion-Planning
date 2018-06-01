@@ -154,7 +154,7 @@ class MotionPlanning(Drone):
     goal_position = (-122.393445, 37.795909, 0)
     local_goal = global_to_local(goal_position, self.global_home)
     grid_goal = (int(local_goal[0] - north_offset), int(local_goal[1] - east_offset))
-  	
+    
     #grid_goal = global_to_local((-122.393445, 37.795909, 0), global_home)
     # washington_street = (-122.396384, 37.797412)
     # local_to_global(local_position, global_home):
