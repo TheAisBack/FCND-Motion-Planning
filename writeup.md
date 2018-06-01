@@ -68,7 +68,9 @@ local_position = global_to_local(global_position, self.global_home)
 This is another step in adding flexibility to the start location. As long as it works you're good to go!
 
 This code below shows how I was able to get my grid start position from the code shown above...
-```grid_start = (int(local_position[0] - north_offset), int(local_position[1] - east_offset))```
+```
+grid_start = (int(local_position[0] - north_offset), int(local_position[1] - east_offset))
+```
 
 Look at that drone go!
 
