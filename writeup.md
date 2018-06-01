@@ -34,6 +34,7 @@ However, the main code is the motion_planning.py file
 The code includes the function plan_path, which reads the colliders.csv file, sets the global_position, creates the grid, calculating the path, using the functions from planning_utils to push the drone forward and perform those actions.
 
 And here's a lovely image of my results
+
 ![Top Down View](./img/wash_street.png)
 
 ### Implementing Your Path Planning Algorithm
@@ -41,7 +42,17 @@ And here's a lovely image of my results
 #### 1. Set your global home position
 Here students should read the first line of the csv file, extract lat0 and lon0 as floating point values and use the self.set_home_position() method to set global home. Explain briefly how you accomplished this in your code.
 
-![Map of SF](./img/wash_street.png)
+The code below will show how I was able to extract the lat0 and lon0 and then set the position.
+It will show opening the file colliders.csv, then reading the file to extract the lat0 and lon0, then setting that position by using the function set_home_position()
+
+```
+with open('colliders.csv') as f:
+    reader = f.readline().split(',')
+lat0 = float(reader[0].strip().split(' ')[1])
+lon0 = float(reader[1].strip().split(' ')[1])
+
+self.set_home_position(lon0, lat0, 0)
+```
 
 #### 2. Set your current local position
 Here as long as you successfully determine your local position relative to global home you'll be all set. Explain briefly how you accomplished this in your code.
