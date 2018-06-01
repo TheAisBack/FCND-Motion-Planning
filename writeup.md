@@ -67,12 +67,8 @@ For this step you can use a collinearity test or ray tracing method like Bresenh
 
 The drone points were checked to see if they are collinerarity, if they are then the points would be then be pruned out and given a route that would be more efficient. The code below shows how prune and collinerity is written. 
 
-def collinearity_check(p1, p2, p3, epsilon=1e-6):
-m = np.concatenate((p1, p2, p3), 0)
-det = np.linalg.det(m)
-return abs(det) < epsilon
-
-```def collinearity_check(p1, p2, p3, epsilon=1e-6):   
+```
+def collinearity_check(p1, p2, p3, epsilon=1e-6):   
     m = np.concatenate((p1, p2, p3), 0)
     det = np.linalg.det(m)
     return abs(det) < epsilon
