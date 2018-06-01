@@ -35,7 +35,7 @@ The code includes the function plan_path, which reads the colliders.csv file, se
 
 And here's a lovely image of my results
 
-![Top Down View](./img/wash_street.png)
+![Street](./img/wash_street.png)
 
 ### Implementing Your Path Planning Algorithm
 
@@ -58,10 +58,11 @@ self.set_home_position(lon0, lat0, 0)
 Here as long as you successfully determine your local position relative to global home you'll be all set. Explain briefly how you accomplished this in your code.
 
 Meanwhile, here's a picture of me flying through the trees!
-![Forest Flying](./misc/in_the_trees.png)
 
 #### 3. Set grid start position from local position
 This is another step in adding flexibility to the start location. As long as it works you're good to go!
+
+![Dot to Dot](./img/dot_dot.png)
 
 #### 4. Set grid goal position from geodetic coords
 This step is to add flexibility to the desired goal location. Should be able to choose any (lat, lon) within the map and have it rendered to a goal location on the grid.
