@@ -57,10 +57,20 @@ self.set_home_position(lon0, lat0, 0)
 #### 2. Set your current local position
 Here as long as you successfully determine your local position relative to global home you'll be all set. Explain briefly how you accomplished this in your code.
 
-Meanwhile, here's a picture of me flying through the trees!
+The code below shows how I was able to get local position from my global home...
+
+```
+# TODO: convert to current local position using global_to_local()
+local_position = global_to_local(global_position, self.global_home)
+```
 
 #### 3. Set grid start position from local position
 This is another step in adding flexibility to the start location. As long as it works you're good to go!
+
+This code below shows how I was able to get my grid start position from the code shown above...
+```grid_start = (int(local_position[0] - north_offset), int(local_position[1] - east_offset))```
+
+Look at that drone go!
 
 ![Dot to Dot](./img/dot_dot.png)
 
